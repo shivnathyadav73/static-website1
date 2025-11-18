@@ -30,7 +30,7 @@ pipeline {
 
     post {
         success {
-            echo "Website running at: http://localhost:9090"
+            echo "Website running at: http://localhost:5553"
         }
     }
 }
