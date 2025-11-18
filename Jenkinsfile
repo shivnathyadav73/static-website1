@@ -22,7 +22,7 @@ pipeline {
                 powershell """
                     docker stop static-web 2>\$null
                     docker rm static-web 2>\$null
-                    docker run -d --name static-web -p 9090:80 static-website:latest
+                    docker run -d --name static-web -p 5553:80 static-website:latest
                 """
             }
         }
