@@ -29,8 +29,8 @@ pipeline {
             steps {
                 echo "Pushing image to Docker Hub..."
                 bat """
-                    docker tag %IMAGE_NAME%:latest %DOCKERHUB_USER%/%IMAGE_NAME%:latest
                     docker login -u %DOCKERHUB_USER% -p %DOCKERHUB_PASS%
+                    docker tag %IMAGE_NAME%:latest %DOCKERHUB_USER%/%IMAGE_NAME%:latest
                     docker push %DOCKERHUB_USER%/%IMAGE_NAME%:latest
                 """
             }
