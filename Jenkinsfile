@@ -25,17 +25,25 @@ pipeline {
             }
         }
 
-        stage('Push to Docker Hub') {
-            steps {
-                echo "Pushing image to Docker Hub..."
-                bat """
-                    docker login -u %DOCKERHUB_USER% -p %DOCKERHUB_PASS%
-                    docker tag %IMAGE_NAME%:latest %DOCKERHUB_USER%/%IMAGE_NAME%:latest
-                    docker push %DOCKERHUB_USER%/%IMAGE_NAME%:latest
-                """
-            }
-        }
+       stage('Push to Docker Hub') {
+    steps {
+        echo "Pushing image to Docker Hub..."
+        bat """
+            docker login -u %DOCKERHUB_USER% -p %DOCKERHUB_PASS%
+            docker tag %IMAGE_NAME%:latest %DOCKERHUB_USER%/%IMAGE_NAME%:latest
+            docker push %DOCKERHUB_USER%/%IMAGE_NAME%:latest
+        """
+    }
+}
 
+        
+
+
+
+
+
+
+        
         stage('Deploy to Kubernetes') {
             steps {
                 echo "Deploying to Kubernetes cluster..."
