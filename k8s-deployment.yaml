@@ -2,6 +2,8 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: static-website-deployment
+  labels:
+    app: static-website
 spec:
   replicas: 2
   selector:
@@ -13,7 +15,7 @@ spec:
         app: static-website
     spec:
       containers:
-        - name: static-website
-          image: yourdockerhubusername/static-website:11
+        - name: static-website-container
+          image: shivsoftapp/static-website:11
           ports:
             - containerPort: 80
