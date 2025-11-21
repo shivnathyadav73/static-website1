@@ -20,30 +20,22 @@ pipeline {
             steps {
                 echo "Building Docker Image..."
                 bat """
-                    docker build -t %IMAGE_NAME%:latest .
+                    docker build -t %IMAGE_NAME%:11 .
                 """
             }
         }
 
-       stage('Push to Docker Hub') {
-    steps {
-        echo "Pushing image to Docker Hub..."
-        bat """
-            docker login -u %DOCKERHUB_USER% -p %DOCKERHUB_PASS%
-            docker tag %IMAGE_NAME%:latest %DOCKERHUB_USER%/%IMAGE_NAME%:latest
-            docker push %DOCKERHUB_USER%/%IMAGE_NAME%:latest
-        """
-    }
-}
+        stage('Push to Docker Hub') {
+            steps {
+                echo "Pushing image to Docker Hub..."
+                bat """
+                    docker login -u %DOCKERHUB_USER% -p %DOCKERHUB_PASS%
+                    docker tag %IMAGE_NAME%:11 %DOCKERHUB_USER%/%IMAGE_NAME%:11
+                    docker push %DOCKERHUB_USER%/%IMAGE_NAME%:11
+                """
+            }
+        }
 
-        
-
-
-
-
-
-
-        
         stage('Deploy to Kubernetes') {
             steps {
                 echo "Deploying to Kubernetes cluster..."
