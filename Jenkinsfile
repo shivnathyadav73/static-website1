@@ -2,46 +2,46 @@ pipeline {
     agent any
 
     environment {
-        DOCKERHUB_USER = "shivsoftapp"
-        DOCKERHUB_PASS = "india@12345"
-        IMAGE_NAME = "static-website"
+        KUBECONFIG = "C:\\ProgramData\\Jenkins\\.kube\\config"
+        PATH = "C:\\Program Files\\Kubernetes\\;${env.PATH}"
     }
 
     stages {
 
-        stage('Checkout from GitHub') {
+        stage('Checkout') {
             steps {
-                echo 'Pulling website code from GitHub...'
-                git branch: 'main', url: 'https://github.com/shivnathyadav73/static-website1.git'
+                echo 'Pulling website code...'
+                git branch: 'main', url: 'https://github.com/bulbulsharma102001/Static-project.git'
             }
         }
 
         stage('Build Docker Image') {
             steps {
-                echo "Building Docker Image..."
-                bat """
-                    docker build -t %IMAGE_NAME%:11 .
+                powershell """
+                    docker build -t static-website:latest .
                 """
             }
         }
 
-        stage('Push to Docker Hub') {
+        stage('Run Container') {
             steps {
-                echo "Pushing image to Docker Hub..."
-                bat """
-                    docker login -u %DOCKERHUB_USER% -p %DOCKERHUB_PASS%
-                    docker tag %IMAGE_NAME%:11 %DOCKERHUB_USER%/%IMAGE_NAME%:11
-                    docker push %DOCKERHUB_USER%/%IMAGE_NAME%:11
+                powershell """
+                    docker stop static-web 2>\$null
+                    docker rm static-web 2>\$null
+                    docker run -d --name static-web -p 9090:80 static-website:latest
                 """
             }
         }
 
         stage('Deploy to Kubernetes') {
             steps {
-                echo "Deploying to Kubernetes cluster..."
-                bat """
-                    kubectl apply -f k8s-deployment.yaml
-                    kubectl apply -f k8s-service.yaml
+                echo "Applying Kubernetes manifests..."
+                powershell """
+                    echo "Checking Kubernetes cluster access..."
+                    kubectl get nodes
+
+                    echo "Deploying to Minikube..."
+                    kubectl apply --validate=false -f "${WORKSPACE}\\k8s.yaml"
                 """
             }
         }
@@ -49,10 +49,8 @@ pipeline {
 
     post {
         success {
-            echo "🎉 Website successfully deployed from GitHub to Kubernetes!"
-        }
-        failure {
-            echo "❌ Something went wrong!"
+            echo "Website running at: http://localhost:9090"
+            echo "Kubernetes deployment applied successfully."
         }
     }
 }
