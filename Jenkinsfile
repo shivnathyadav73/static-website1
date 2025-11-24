@@ -11,7 +11,7 @@ pipeline {
         stage('Checkout') {
             steps {
                 echo 'Pulling website code...'
-                git branch: 'main', url: 'https://github.com/bulbulsharma102001/Static-project.git'
+                git branch: 'main', url: 'https://github.com/shivnathyadav73/static-website1.git'
             }
         }
 
