@@ -35,7 +35,6 @@ pipeline {
 
         stage('Deploy to Kubernetes') {
             steps {
-                echo "Applying Kubernetes manifests..."
                 powershell """
                     echo "Checking Kubernetes cluster access..."
                     kubectl get nodes
